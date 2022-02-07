@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ts-node" : "~<version number>",
+    "start":"ts-node index.ts",
     "build": "tsc --project ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
