@@ -5,7 +5,7 @@ export default interface TuitControllerI {
 
     findTuitById(req: Request, res: Response): void;
 
-    findTuitsByUser(req: Request, res: Response): void;
+    findAllTuitsByUser(req: Request, res: Response): void;
 
     createTuit(req: Request, res: Response): void;
 
