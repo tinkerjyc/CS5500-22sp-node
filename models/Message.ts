@@ -16,5 +16,5 @@ export default interface Message{
     message: String,
     to: User,
     from:User,
-    sentOn: Date
+    sentOn?: Date
 };

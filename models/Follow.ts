@@ -11,6 +11,6 @@ import User from "./User";
  * @property {User} userFollowedBy User is following by other users
  */
 export default interface Follow{
-    userFollowed: User,
+    userFollowing: User,
     userFollowedBy: User
 }
