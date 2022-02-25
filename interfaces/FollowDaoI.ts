@@ -11,8 +11,4 @@ export default interface FollowDaoI {
     findAllUsersFollowing(uid: string): Promise<Follow[]>;
 
     findAllUsersFollower(uid: string): Promise<Follow[]>;
-
-    userRemoveFollower(uid: string, xuid: string): Promise<any>;
-
-    findAllFollows(): Promise<Follow[]>;
 };

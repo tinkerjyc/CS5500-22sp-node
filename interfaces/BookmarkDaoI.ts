@@ -11,6 +11,4 @@ export default interface BookmarkDaoI {
     userUnbookmarksTuit(uid: string, tid: string): Promise<any>;
 
     userBookmarksTuit(uid: string, tid: string): Promise<Bookmark>;
-
-    findAllBookmarks(): Promise<Bookmark[]>;
 }

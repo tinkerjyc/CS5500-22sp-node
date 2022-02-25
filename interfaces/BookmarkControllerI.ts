@@ -8,6 +8,4 @@ export default interface BookmarkControllerI {
     userUnbookmarksTuit(req: Request, res: Response): void;
 
     userBookmarksTuit(req: Request, res: Response): void;
-
-    findAllBookmarks(req: Request, res: Response): void;
 };

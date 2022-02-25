@@ -8,8 +8,4 @@ export default interface FollowControllerI {
     findAllUsersFollowing(req: Request, res: Response): void;
 
     findAllUsersFollower(req: Request, res: Response): void;
-
-    userRemoveFollower(req: Request, res: Response): void;
-
-    findAllFollows(req: Request, res: Response): void;
 };
