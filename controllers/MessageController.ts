@@ -94,7 +94,7 @@ export default class MessageController implements MessageControllerI {
      * database
      */
     sendMessage = (req: Request, res: Response) =>
-        MessageController.messageDao.sendMessage(req.params.uid1, req.params.uid2, req.body.message)
+        MessageController.messageDao.sendMessage(req.params.uid, req.params.xuid, req.body.message)
             .then((messages: Message) => res.json(messages));
 
     /**
