@@ -48,6 +48,9 @@ class TuitDao {
             return TuitModel_1.default.updateOne({ _id: tid }, { $set: { stats: newStats } });
         });
         this.deleteTuit = (uid) => __awaiter(this, void 0, void 0, function* () { return TuitModel_1.default.deleteOne({ _id: uid }); });
+        this.updateDisLikes = (tid, newStats) => __awaiter(this, void 0, void 0, function* () {
+            return TuitModel_1.default.updateOne({ _id: tid }, { $set: { stats: newStats } });
+        });
     }
 }
 exports.default = TuitDao;

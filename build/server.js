@@ -15,6 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
+require('dotenv').config({
+    path: "./.env"
+});
 const express_1 = __importDefault(require("express"));
 const CourseController_1 = __importDefault(require("./controllers/CourseController"));
 const UserController_1 = __importDefault(require("./controllers/UserController"));
@@ -24,16 +27,20 @@ const SessionController_1 = __importDefault(require("./controllers/SessionContro
 const AuthenticationController_1 = __importDefault(require("./controllers/AuthenticationController"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const GroupController_1 = __importDefault(require("./controllers/GroupController"));
+const DisLikeController_1 = __importDefault(require("./controllers/DisLikeController"));
+const FollowController_1 = __importDefault(require("./controllers/FollowController"));
+const BookMarkController_1 = __importDefault(require("./controllers/BookMarkController"));
+const MessageController_1 = __importDefault(require("./controllers/MessageController"));
 const cors = require("cors");
 const session = require("express-session");
 // build the connection string
-const PROTOCOL = "mongodb+srv";
-const DB_USERNAME = process.env.DB_USERNAME;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const HOST = "cluster0.m8jeh.mongodb.net";
-const DB_NAME = "myFirstDatabase";
-const DB_QUERY = "retryWrites=true&w=majority";
-const connectionString = `${PROTOCOL}://${DB_USERNAME}:${DB_PASSWORD}@${HOST}/${DB_NAME}?${DB_QUERY}`; // connect to the database
+// const PROTOCOL = "mongodb+srv";
+// const DB_USERNAME = process.env.DB_USERNAME;
+// const DB_PASSWORD = process.env.DB_PASSWORD;
+// const HOST = "cluster0.m8jeh.mongodb.net";
+// const DB_NAME = "myFirstDatabase";
+// const DB_QUERY = "retryWrites=true&w=majority";
+const connectionString = `mongodb+srv://root:toor@whiteboard.quiue.mongodb.net/movie-db?retryWrites=true&w=majority`; // connect to the database
 mongoose_1.default.connect(connectionString);
 const app = (0, express_1.default)();
 app.use(cors({
@@ -61,6 +68,10 @@ const courseController = new CourseController_1.default(app);
 const userController = UserController_1.default.getInstance(app);
 const tuitController = TuitController_1.default.getInstance(app);
 const likesController = LikeController_1.default.getInstance(app);
+const disLikeController = DisLikeController_1.default.getInstance(app);
+const followController = FollowController_1.default.getInstance(app);
+const bookmarkController = BookMarkController_1.default.getInstance(app);
+const messageController = MessageController_1.default.getInstance(app);
 (0, SessionController_1.default)(app);
 (0, AuthenticationController_1.default)(app);
 (0, GroupController_1.default)(app);
