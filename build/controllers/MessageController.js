@@ -61,8 +61,8 @@ class MessageController {
          * body formatted as JSON containing the new messages that was inserted in the
          * database
          */
-        this.sendMessage = (req, res) => MessageController.messageDao.sendMessage(req.params.uid, req.params.uxid, req.body)
-            .then(message => res.json(message));
+        this.sendMessage = (req, res) => MessageController.messageDao.sendMessage(req.params.uid, req.params.xuid, req.body.message)
+            .then((messages) => res.json(messages));
         /**
          * Records that a message was updated
          * @param {Request} req Represents request from client, including the path

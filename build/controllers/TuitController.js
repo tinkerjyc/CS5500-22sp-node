@@ -19,7 +19,6 @@ const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
  *     <li>PUT /api/tuits/:tid to modify an individual tuit instance </li>
  *     <li>DELETE /api/tuits/:tid to remove a particular tuit instance</li>
  * </ul>
- * @implements {TuitControllerI} TuitControllerI
  * @property {TuitDao} tuitDao Singleton DAO implementing tuit CRUD operations
  * @property {TuitController} tuitController Singleton controller implementing
  * RESTful Web service API
@@ -35,15 +34,6 @@ class TuitController {
         this.findAllTuits = (req, res) => TuitController.tuitDao.findAllTuits()
             .then((tuits) => res.json(tuits));
         /**
-         * Retrieves all tuits from the database for a particular user and returns
-         * an array of tuits.
-         * @param {Request} req Represents request from client
-         * @param {Response} res Represents response to client, including the
-         * body formatted as JSON arrays containing the tuit objects
-         */
-        this.findAllTuitsByUser = (req, res) => TuitController.tuitDao.findAllTuitsByUser(req.params.uid)
-            .then((tuits) => res.json(tuits));
-        /**
          * @param {Request} req Represents request from client, including path
          * parameter tid identifying the primary key of the tuit to be retrieved
          * @param {Response} res Represents response to client, including the
@@ -52,6 +42,25 @@ class TuitController {
         this.findTuitById = (req, res) => TuitController.tuitDao.findTuitById(req.params.uid)
             .then((tuit) => res.json(tuit));
         /**
+         * Retrieves all tuits from the database for a particular user and returns
+         * an array of tuits.
+         * @param {Request} req Represents request from client
+         * @param {Response} res Represents response to client, including the
+         * body formatted as JSON arrays containing the tuit objects
+         */
+        this.findAllTuitsByUser = (req, res) => {
+            // @ts-ignore
+            let userId = req.params.uid === "my" && req.session['profile'] ?
+                // @ts-ignore
+                req.session['profile']._id : req.params.uid;
+            if (userId === "my") {
+                res.sendStatus(503);
+                return;
+            }
+            TuitController.tuitDao.findAllTuitsByUser(userId)
+                .then((tuits) => res.json(tuits));
+        };
+        /**
          * @param {Request} req Represents request from client, including body
          * containing the JSON object for the new tuit to be inserted in the
          * database
@@ -59,8 +68,18 @@ class TuitController {
          * body formatted as JSON containing the new tuit that was inserted in the
          * database
          */
-        this.createTuit = (req, res) => TuitController.tuitDao.createTuit(req.body)
-            .then((tuit) => res.json(tuit));
+        this.createTuitByUser = (req, res) => {
+            // @ts-ignore
+            let userId = req.params.uid === "my" && req.session['profile'] ?
+                // @ts-ignore
+                req.session['profile']._id : req.params.uid;
+            if (userId === "my") {
+                res.sendStatus(503);
+                return;
+            }
+            TuitController.tuitDao.createTuitByUser(userId, req.body)
+                .then((tuit) => res.json(tuit));
+        };
         /**
          * @param {Request} req Represents request from client, including path
          * parameter tid identifying the primary key of the tuit to be modified
@@ -94,7 +113,7 @@ TuitController.getInstance = (app) => {
         app.get("/api/tuits", TuitController.tuitController.findAllTuits);
         app.get("/api/users/:uid/tuits", TuitController.tuitController.findAllTuitsByUser);
         app.get("/api/tuits/:uid", TuitController.tuitController.findTuitById);
-        app.post("/api/tuits", TuitController.tuitController.createTuit);
+        app.post("/api/users/:uid/tuits", TuitController.tuitController.createTuitByUser);
         app.put("/api/tuits/:uid", TuitController.tuitController.updateTuit);
         app.delete("/api/tuits/:uid", TuitController.tuitController.deleteTuit);
     }

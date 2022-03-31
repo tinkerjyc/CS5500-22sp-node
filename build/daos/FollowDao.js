@@ -44,7 +44,7 @@ class FollowDao {
         this.findAllUsersFollowing = (uid) => __awaiter(this, void 0, void 0, function* () {
             return FollowModel_1.default
                 .find({ userFollowedBy: uid })
-                .populate("userFollowed")
+                .populate("userFollowedBy")
                 .exec();
         });
         /**

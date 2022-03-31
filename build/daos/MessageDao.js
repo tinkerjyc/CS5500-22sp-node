@@ -60,7 +60,7 @@ class MessageDao {
          * @param {Message} message Instance to be inserted into the database
          * @returns Promise To be notified when message is inserted into the database
          */
-        this.sendMessage = (uid, xuid, message) => __awaiter(this, void 0, void 0, function* () { return MessageModel_1.default.create(Object.assign(Object.assign({}, message), { from: uid, to: xuid })); });
+        this.sendMessage = (uid, xuid, message) => __awaiter(this, void 0, void 0, function* () { return MessageModel_1.default.create({ from: uid, to: xuid, message: message }); });
         /**
          * Changes message instance of a particular user sending a message to
          * another user into the database

@@ -20,7 +20,6 @@ const UserModel_1 = __importDefault(require("../mongoose/users/UserModel"));
 /**
  * @class UserDao Implements Data Access Object managing data storage
  * of Users
- * @implements {UserDaoI} UserDaoI
  * @property {UserDao} userDao Private single instance of UserDao
  */
 class UserDao {
@@ -38,6 +37,13 @@ class UserDao {
          */
         this.findUserById = (uid) => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.findById(uid); });
         /**
+         * Uses UserModel to retrieve single user document from users collection
+         * by their username
+         * @param {string} username User's username
+         * @returns Promise To be notified when user is retrieved from the database
+         */
+        this.findUserByUsername = (username) => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.findOne({ username }); });
+        /**
          * Inserts user instance into the database
          * @param {User} user Instance to be inserted into the database
          * @returns Promise To be notified when user is inserted into the database
@@ -52,6 +58,9 @@ class UserDao {
         this.updateUser = (uid, user) => __awaiter(this, void 0, void 0, function* () {
             return UserModel_1.default.updateOne({ _id: uid }, { $set: user });
         });
+        this.updateUserSalaryByUsername = (username, salary) => __awaiter(this, void 0, void 0, function* () {
+            return UserModel_1.default.updateOne({ username }, { $set: { salary: salary } });
+        });
         /**
          * Removes user from the database.
          * @param {string} uid Primary key of user to be removed
@@ -64,6 +73,8 @@ class UserDao {
          * database
          */
         this.deleteAllUsers = () => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.deleteMany({}); });
+        this.deleteUsersByUsername = (username) => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.deleteMany({ username }); });
+        this.findUserByCredentials = (username, password) => __awaiter(this, void 0, void 0, function* () { return UserModel_1.default.findOne({ username: username, password: password }); });
     }
 }
 exports.default = UserDao;
