@@ -21,21 +21,13 @@ import mongoose from 'mongoose';
 import UserController from './controllers/UserController';
 import TuitController from "./controllers/TuitController";
 import LikeController from "./controllers/LikeController";
-import DislikeController from "./controllers/DisLikeController";
+import DislikeController from "./controllers/DislikeController";
 import FollowController from "./controllers/FollowController";
 import BookmarkController from "./controllers/BookMarkController";
 import MessageController from "./controllers/MessageController";
 import SessionController from "./controllers/SessionController";
 import AuthenticationController from "./controllers/AuthenticationController";
 import GroupController from "./controllers/GroupController";
-
-var cors = require('cors')
-const session = require("express-session");
-const app = express();
-app.use(cors({
-    credentials: true,
-    origin: 'https://whimsical-sherbet-2ee5b2.netlify.app'
-}));
 
 // build the connection string
 const PROTOCOL = "mongodb+srv";
@@ -50,6 +42,14 @@ mongoose.connect(connectionString);
 
 // connect to the database
 // mongoose.connect('mongodb://localhost:27017/tuit-db');
+
+var cors = require('cors')
+const session = require("express-session");
+const app = express();
+app.use(cors({
+    credentials: true,
+    origin: 'https://whimsical-sherbet-2ee5b2.netlify.app'
+}));
 
 let sess = {
     secret: process.env.EXPRESS_SESSION_SECRET,

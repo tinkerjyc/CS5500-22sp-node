@@ -7,19 +7,20 @@ import LikeControllerI from "../interfaces/LikeControllerI";
 import TuitDao from "../daos/TuitDao";
 
 /**
- * @class TuitController Implements RESTful Web service API for likes resource.
+ * @class LikeController Implements RESTful Web service API for likes resource.
  * Defines the following HTTP endpoints:
  * <ul>
  *     <li>GET /api/users/:uid/likes to retrieve all the tuits liked by a user
  *     </li>
  *     <li>GET /api/tuits/:tid/likes to retrieve all users that liked a tuit
  *     </li>
- *     <li>POST /api/users/:uid/likes/:tid to record that a user likes a tuit
+ *     <li>GET /api/users/:uid/likes/:tid to record if a user likes a tuit
  *     </li>
- *     <li>DELETE /api/users/:uid/unlikes/:tid to record that a user
- *     no londer likes a tuit</li>
+ *     <li>PUT /api/users/:uid/likes/:tid to toggle that a user likes a tuit
+ *     </li>
  * </ul>
  * @property {LikeDao} likeDao Singleton DAO implementing likes CRUD operations
+ * @property {TuitDao} tuitDao Singleton DAO implementing tuits CRUD operations
  * @property {LikeController} LikeController Singleton controller implementing
  * RESTful Web service API
  */
@@ -31,19 +32,21 @@ export default class LikeController implements LikeControllerI {
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
      * API
-     * @return TuitController
+     * @return LikeController
      */
     public static getInstance = (app: Express): LikeController => {
-        if(LikeController.likeController === null) {
+        if (LikeController.likeController === null) {
             LikeController.likeController = new LikeController();
             app.get("/api/users/:uid/likes", LikeController.likeController.findAllTuitsLikedByUser);
             app.get("/api/tuits/:tid/likes", LikeController.likeController.findAllUsersThatLikedTuit);
+            app.get("/api/users/:uid/likes/:tid", LikeController.likeController.findUserLikedTuit);
             app.put("/api/users/:uid/likes/:tid", LikeController.likeController.userTogglesTuitLikes);
         }
         return LikeController.likeController;
     }
 
-    private constructor() {}
+    private constructor() {
+    }
 
     /**
      * Retrieves all users that liked a tuit from the database
@@ -67,18 +70,46 @@ export default class LikeController implements LikeControllerI {
         const uid = req.params.uid;
         // @ts-ignore
         const profile = req.session['profile'];
-        const userId = uid === "me" && profile ?
+        const userId = uid === 'me' && profile ?
             profile._id : uid;
 
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
         LikeController.likeDao.findAllTuitsLikedByUser(userId)
             .then(likes => {
+                // filter out likes with null tuits. Only keep defined tuits
+                // extract tuit object from likes respond with tuits
                 const likesNonNullTuits = likes.filter(like => like.tuit);
                 const tuitsFromLikes = likesNonNullTuits.map(like => like.tuit);
                 res.json(tuitsFromLikes);
             });
     }
 
-    
+    /**
+     * Check if the user has already liked the tuit
+     * @param {Request} req Represents request from client, including the path
+     * parameter uid representing the user, and the tid representing the tuit
+     * @param {Response} res Represents response to client, including the
+     * body formatted as JSON object containing the like objects or null
+     */
+    findUserLikedTuit = async (req: Request, res: Response) => {
+        const uid = req.params.uid;
+        const tid = req.params.tid;
+        // @ts-ignore
+        const profile = req.session['profile'];
+        const userId = uid === 'me' && profile ?
+            profile._id : uid;
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
+        LikeController.likeDao.findUserLikesTuit(userId, tid)
+            .then(like => res.json(like));
+    }
+
+
     /**
      * @param {Request} req Represents request from client, including the
      * path parameters uid and tid representing the user that is liking the tuit
@@ -94,8 +125,12 @@ export default class LikeController implements LikeControllerI {
         const tid = req.params.tid;
         // @ts-ignore
         const profile = req.session['profile'];
-        const userId = uid === "me" && profile ?
+        const userId = uid === 'me' && profile ?
             profile._id : uid;
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
         try {
             const userAlreadyLikedTuit = await likeDao.findUserLikesTuit(userId, tid);
             const howManyLikedTuit = await likeDao.countHowManyLikedTuit(tid);
@@ -106,11 +141,12 @@ export default class LikeController implements LikeControllerI {
             } else {
                 await LikeController.likeDao.userLikesTuit(userId, tid);
                 tuit.stats.likes = howManyLikedTuit + 1;
-            };
+            }
             await tuitDao.updateLikes(tid, tuit.stats);
             res.sendStatus(200);
         } catch (e) {
             res.sendStatus(404);
         }
     }
-};
+}
+;
