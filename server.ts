@@ -34,7 +34,7 @@ const session = require("express-session");
 const app = express();
 app.use(cors({
     credentials: true,
-    origin: process.env.CORS_ORIGIN
+    origin: 'https://whimsical-sherbet-2ee5b2.netlify.app'
 }));
 
 // build the connection string
