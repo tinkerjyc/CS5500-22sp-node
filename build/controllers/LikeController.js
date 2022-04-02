@@ -1,19 +1,42 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    function adopt(value) {
+        return value instanceof P ? value : new P(function (resolve) {
+            resolve(value);
+        });
+    }
+
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function fulfilled(value) {
+            try {
+                step(generator.next(value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+
+        function rejected(value) {
+            try {
+                step(generator["throw"](value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+
+        function step(result) {
+            result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+    return (mod && mod.__esModule) ? mod : {"default": mod};
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 const LikeDao_1 = __importDefault(require("../daos/LikeDao"));
 const TuitDao_1 = __importDefault(require("../daos/TuitDao"));
+
 /**
  * @class TuitController Implements RESTful Web service API for likes resource.
  * Defines the following HTTP endpoints:
@@ -40,8 +63,9 @@ class LikeController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the user objects
          */
-        this.findAllUsersThatLikedTuit = (req, res) => LikeController.likeDao.findAllUsersThatLikedTuit(req.params.tid)
-            .then(likes => res.json(likes));
+        this.findAllUsersThatLikedTuit =
+            (req, res) => LikeController.likeDao.findAllUsersThatLikedTuit(req.params.tid)
+                .then(likes => res.json(likes));
         /**
          * Retrieves all tuits liked by a user from the database
          * @param {Request} req Represents request from client, including the path
@@ -54,13 +78,13 @@ class LikeController {
             // @ts-ignore
             const profile = req.session['profile'];
             const userId = uid === "me" && profile ?
-                profile._id : uid;
+                           profile._id : uid;
             LikeController.likeDao.findAllTuitsLikedByUser(userId)
                 .then(likes => {
-                const likesNonNullTuits = likes.filter(like => like.tuit);
-                const tuitsFromLikes = likesNonNullTuits.map(like => like.tuit);
-                res.json(tuitsFromLikes);
-            });
+                    const likesNonNullTuits = likes.filter(like => like.tuit);
+                    const tuitsFromLikes = likesNonNullTuits.map(like => like.tuit);
+                    res.json(tuitsFromLikes);
+                });
         };
         /**
          * @param {Request} req Represents request from client, including the
@@ -78,7 +102,7 @@ class LikeController {
             // @ts-ignore
             const profile = req.session['profile'];
             const userId = uid === "me" && profile ?
-                profile._id : uid;
+                           profile._id : uid;
             try {
                 const userAlreadyLikedTuit = yield likeDao.findUserLikesTuit(userId, tid);
                 const howManyLikedTuit = yield likeDao.countHowManyLikedTuit(tid);
@@ -86,21 +110,20 @@ class LikeController {
                 if (userAlreadyLikedTuit) {
                     yield likeDao.userUnlikesTuit(userId, tid);
                     tuit.stats.likes = howManyLikedTuit - 1;
-                }
-                else {
+                } else {
                     yield LikeController.likeDao.userLikesTuit(userId, tid);
                     tuit.stats.likes = howManyLikedTuit + 1;
                 }
                 ;
                 yield tuitDao.updateLikes(tid, tuit.stats);
                 res.sendStatus(200);
-            }
-            catch (e) {
+            } catch (e) {
                 res.sendStatus(404);
             }
         });
     }
 }
+
 exports.default = LikeController;
 LikeController.likeDao = LikeDao_1.default.getInstance();
 LikeController.tuitDao = TuitDao_1.default.getInstance();

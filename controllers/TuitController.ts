@@ -1,7 +1,7 @@
 /**
  * @file Controller RESTful Web service API for tuits resource
  */
-import {Request, Response, Express} from "express";
+import {Express, Request, Response} from "express";
 import Tuit from "../models/tuits/Tuit";
 import TuitDao from "../daos/TuitDao";
 import TuitControllerI from "../interfaces/TuitControllerI";
@@ -26,6 +26,9 @@ export default class TuitController implements TuitControllerI {
     private static tuitDao: TuitDao = TuitDao.getInstance();
     private static tuitController: TuitController | null = null;
 
+    private constructor() {
+    }
+
     /**
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
@@ -36,6 +39,9 @@ export default class TuitController implements TuitControllerI {
         if (TuitController.tuitController === null) {
             TuitController.tuitController = new TuitController();
 
+            // for testing without postman. Not RESTful
+            app.get("/api/tuits/:uid/delete", TuitController.tuitController.deleteTuitByUserId);
+
             // RESTful User Web service API
             app.get("/api/tuits", TuitController.tuitController.findAllTuits);
             app.get("/api/users/:uid/tuits", TuitController.tuitController.findAllTuitsByUser);
@@ -45,9 +51,6 @@ export default class TuitController implements TuitControllerI {
             app.delete("/api/tuits/:tid", TuitController.tuitController.deleteTuit);
         }
         return TuitController.tuitController;
-    }
-
-    private constructor() {
     }
 
     /**
@@ -72,11 +75,6 @@ export default class TuitController implements TuitControllerI {
         let userId = req.params.uid === 'me' && req.session['profile'] ?
             // @ts-ignore
             req.session['profile']._id : req.params.uid;
-        console.log (req.params.uid);
-        console.log (req.session);
-        console.log (userId);
-
-        
         if (userId === "me") {
             res.sendStatus(503);
             return;
@@ -123,6 +121,16 @@ export default class TuitController implements TuitControllerI {
      */
     deleteTuit = (req: Request, res: Response) =>
         TuitController.tuitDao.deleteTuit(req.params.tid)
+            .then((status) => res.send(status));
+
+    /**
+     * @param {Request} req Represents request from client, including path
+     * parameter uid identifying the primary key of the dummy user's tuit to be removed
+     * @param {Response} res Represents response to client, including status
+     * on whether deleting a tuit was successful or not
+     */
+    deleteTuitByUserId = (req: Request, res: Response) =>
+        TuitController.tuitDao.deleteTuitByUserId(req.params.uid)
             .then((status) => res.send(status));
 
     /**

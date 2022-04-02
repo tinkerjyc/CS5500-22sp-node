@@ -1,18 +1,41 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    function adopt(value) {
+        return value instanceof P ? value : new P(function (resolve) {
+            resolve(value);
+        });
+    }
+
     return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function fulfilled(value) {
+            try {
+                step(generator.next(value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+
+        function rejected(value) {
+            try {
+                step(generator["throw"](value));
+            } catch (e) {
+                reject(e);
+            }
+        }
+
+        function step(result) {
+            result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+    return (mod && mod.__esModule) ? mod : {"default": mod};
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 const FollowModel_1 = __importDefault(require("../mongoose/follows/FollowModel"));
+
 /**
  * @class FollowDao Implements Data Access Object managing data storage
  * of Follows
@@ -30,7 +53,7 @@ class FollowDao {
          */
         this.findAllUsersFollower = (uid) => __awaiter(this, void 0, void 0, function* () {
             return FollowModel_1.default
-                .find({ userFollowing: uid })
+                .find({userFollowing: uid})
                 .populate("userFollowing")
                 .exec();
         });
@@ -43,7 +66,7 @@ class FollowDao {
          */
         this.findAllUsersFollowing = (uid) => __awaiter(this, void 0, void 0, function* () {
             return FollowModel_1.default
-                .find({ userFollowedBy: uid })
+                .find({userFollowedBy: uid})
                 .populate("userFollowedBy")
                 .exec();
         });
@@ -54,7 +77,9 @@ class FollowDao {
          * @param {string} xuid Primary key of the user being followed by another user
          * @returns Promise To be notified when follow is inserted into the database
          */
-        this.userFollowsUser = (uid, xuid) => __awaiter(this, void 0, void 0, function* () { return FollowModel_1.default.create({ userFollowing: uid, userFollowedBy: xuid }); });
+        this.userFollowsUser = (uid, xuid) => __awaiter(this, void 0, void 0, function* () {
+            return FollowModel_1.default.create({userFollowing: uid, userFollowedBy: xuid});
+        });
         /**
          * Removes follow instance of a particular user following another user
          * from the database.
@@ -62,9 +87,12 @@ class FollowDao {
          * @param {string} xuid Primary key of the user being followed by another user
          * @returns Promise To be notified when follow is removed from the database
          */
-        this.userUnfollowsUser = (uid, xuid) => __awaiter(this, void 0, void 0, function* () { return FollowModel_1.default.deleteOne({ userFollowing: uid, userFollowedBy: xuid }); });
+        this.userUnfollowsUser = (uid, xuid) => __awaiter(this, void 0, void 0, function* () {
+            return FollowModel_1.default.deleteOne({userFollowing: uid, userFollowedBy: xuid});
+        });
     }
 }
+
 exports.default = FollowDao;
 FollowDao.followDao = null;
 /**

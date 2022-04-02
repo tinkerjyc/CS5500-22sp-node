@@ -1,18 +1,18 @@
-import Message from "../models/Message";
-
 /**
- * @file Declares API for Messages related data access object methods
+ * @file Declares API for Bookmarks related data access object methods
  */
+import Message from "../models/messages/Message";
+
 export default interface MessageDaoI {
-    findAllMessagesToUser(uid: string): Promise<Message[]>;
+    findAllMessagesSentByUser(uid: string): Promise<Message[]>;
 
-    findAllMessagesFromUser(uid: string): Promise<Message[]>;
+    findAllMessagesSentToUser(uid: string): Promise<Message[]>;
 
-    findUserMessagesUser(uid: string, xuid: string): Promise<Message[]>;
+    userSendsMessage(source_uid: string, target_uid: string, message: Message): Promise<Message>;
 
-    sendMessage(uid: string, xuid: string, message: Message): Promise<Message>;
+    userDeletesOneMessage(mid: string): Promise<any>;
 
-    updateMessage(mid: string, message: Message): Promise<any>;
+    userDeletesAllSentMessage(uid: string): Promise<any>;
 
-    deleteMessage(mid: string): Promise<any>;
+    userDeletesAllReceivedMessage(uid: string): Promise<any>;
 };

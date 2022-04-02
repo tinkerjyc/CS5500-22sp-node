@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
-mongoose.connect('mongodb://localhost:27017/cs5500-test-123');
 import SectionDao from './SectionDao';
 import CourseDao from "./CourseDao";
+
+mongoose.connect('mongodb://localhost:27017/cs5500-test-123');
 
 test('test course dao', () => {
 

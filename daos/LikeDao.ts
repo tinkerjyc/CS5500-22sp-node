@@ -14,14 +14,15 @@ import Like from "../models/likes/Like";
  */
 export default class LikeDao implements LikeDaoI {
     private static likeDao: LikeDao | null = null;
+
+    private constructor() {
+    }
+
     public static getInstance = (): LikeDao => {
         if (LikeDao.likeDao === null) {
             LikeDao.likeDao = new LikeDao();
         }
         return LikeDao.likeDao;
-    }
-
-    private constructor() {
     }
 
     /**

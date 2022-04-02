@@ -11,7 +11,7 @@ const GENERATIONS = [
 
 export const generation = (yob: number) => {
     const generation = GENERATIONS.find(generation => {
-        if(yob >= generation.from && yob <= generation.to) {
+        if (yob >= generation.from && yob <= generation.to) {
             return true
         } else {
             return false

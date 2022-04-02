@@ -28,6 +28,10 @@ export default class LikeController implements LikeControllerI {
     private static likeDao: LikeDao = LikeDao.getInstance();
     private static tuitDao: TuitDao = TuitDao.getInstance();
     private static likeController: LikeController | null = null;
+
+    private constructor() {
+    }
+
     /**
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
@@ -43,9 +47,6 @@ export default class LikeController implements LikeControllerI {
             app.put("/api/users/:uid/likes/:tid", LikeController.likeController.userTogglesTuitLikes);
         }
         return LikeController.likeController;
-    }
-
-    private constructor() {
     }
 
     /**

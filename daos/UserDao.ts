@@ -14,14 +14,15 @@ import UserDaoI from "../interfaces/UserDaoI";
  */
 export default class UserDao implements UserDaoI {
     private static userDao: UserDao | null = null;
+
+    private constructor() {
+    }
+
     public static getInstance = (): UserDao => {
         if (UserDao.userDao === null) {
             UserDao.userDao = new UserDao();
         }
         return UserDao.userDao;
-    }
-
-    private constructor() {
     }
 
     /**

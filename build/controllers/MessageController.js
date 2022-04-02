@@ -1,9 +1,10 @@
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+    return (mod && mod.__esModule) ? mod : {"default": mod};
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 const MessageDao_1 = __importDefault(require("../daos/MessageDao"));
+
 /**
  * @class MessageController Implements RESTful Web service API for messages resource.
  * Defines the messaging HTTP endpoints:
@@ -32,8 +33,9 @@ class MessageController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the user objects
          */
-        this.findAllMessagesToUser = (req, res) => MessageController.messageDao.findAllMessagesToUser(req.params.uid)
-            .then(messages => res.json(messages));
+        this.findAllMessagesToUser =
+            (req, res) => MessageController.messageDao.findAllMessagesToUser(req.params.uid)
+                .then(messages => res.json(messages));
         /**
          * Retrieves all messages that sent from a user from the database
          * @param {Request} req Represents request from client, including the path
@@ -41,8 +43,9 @@ class MessageController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the user objects
          */
-        this.findAllMessagesFromUser = (req, res) => MessageController.messageDao.findAllMessagesFromUser(req.params.uid)
-            .then(messages => res.json(messages));
+        this.findAllMessagesFromUser =
+            (req, res) => MessageController.messageDao.findAllMessagesFromUser(req.params.uid)
+                .then(messages => res.json(messages));
         /**
          * Retrieves all messages sent from a userA to userB from the database
          * @param {Request} req Represents request from client, including the path
@@ -51,8 +54,10 @@ class MessageController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the message objects that were messaged
          */
-        this.findUserMessagesUser = (req, res) => MessageController.messageDao.findUserMessagesUser(req.params.uid, req.params.xuid)
-            .then(messages => res.json(messages));
+        this.findUserMessagesUser =
+            (req, res) => MessageController.messageDao.findUserMessagesUser(req.params.uid,
+                                                                            req.params.xuid)
+                .then(messages => res.json(messages));
         /**
          * @param {Request} req Represents request from client, including the
          * path parameters uid and tid representing the user that is liking the message
@@ -61,8 +66,10 @@ class MessageController {
          * body formatted as JSON containing the new messages that was inserted in the
          * database
          */
-        this.sendMessage = (req, res) => MessageController.messageDao.sendMessage(req.params.uid, req.params.xuid, req.body.message)
-            .then((messages) => res.json(messages));
+        this.sendMessage =
+            (req, res) => MessageController.messageDao.sendMessage(req.params.uid, req.params.xuid,
+                                                                   req.body.message)
+                .then((messages) => res.json(messages));
         /**
          * Records that a message was updated
          * @param {Request} req Represents request from client, including the path
@@ -70,8 +77,9 @@ class MessageController {
          * @param {Response} res Represents response to client, including the
          * status on whether updating the message was successful or not
          */
-        this.updateMessage = (req, res) => MessageController.messageDao.updateMessage(req.params.mid, req.body)
-            .then((status) => res.send(status));
+        this.updateMessage =
+            (req, res) => MessageController.messageDao.updateMessage(req.params.mid, req.body)
+                .then((status) => res.send(status));
         /**
          * Records that a message was deleted
          * @param {Request} req Represents request from client, including the path
@@ -79,10 +87,12 @@ class MessageController {
          * @param {Response} res Represents response to client, including the
          * status on whether deleting the message was successful or not
          */
-        this.deleteMessage = (req, res) => MessageController.messageDao.deleteMessage(req.params.mid)
-            .then((status) => res.send(status));
+        this.deleteMessage =
+            (req, res) => MessageController.messageDao.deleteMessage(req.params.mid)
+                .then((status) => res.send(status));
     }
 }
+
 exports.default = MessageController;
 MessageController.messageDao = MessageDao_1.default.getInstance();
 MessageController.messageController = null;
@@ -95,9 +105,12 @@ MessageController.messageController = null;
 MessageController.getInstance = (app) => {
     if (MessageController.messageController === null) {
         MessageController.messageController = new MessageController();
-        app.get("/api/users/:uid/inboxes", MessageController.messageController.findAllMessagesToUser);
-        app.get("/api/users/:uid/messages", MessageController.messageController.findAllMessagesFromUser);
-        app.get("/api/users/:uid/messages/:xuid", MessageController.messageController.findUserMessagesUser);
+        app.get("/api/users/:uid/inboxes",
+                MessageController.messageController.findAllMessagesToUser);
+        app.get("/api/users/:uid/messages",
+                MessageController.messageController.findAllMessagesFromUser);
+        app.get("/api/users/:uid/messages/:xuid",
+                MessageController.messageController.findUserMessagesUser);
         app.post("/api/users/:uid/messages/:xuid", MessageController.messageController.sendMessage);
         app.put("/api/messages/:mid", MessageController.messageController.updateMessage);
         app.delete("/api/messages/:mid", MessageController.messageController.deleteMessage);

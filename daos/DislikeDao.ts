@@ -3,7 +3,7 @@
  * to integrate with MongoDB
  */
 import DislikeModel from "../mongoose/dislikes/DislikeModel";
-import Dislike from "../models/dislikes/Dislike";
+import Dislike from "../models/likes/Dislike";
 import DislikeDaoI from "../interfaces/DislikeDaoI";
 
 /**
@@ -14,14 +14,15 @@ import DislikeDaoI from "../interfaces/DislikeDaoI";
  */
 export default class DislikeDao implements DislikeDaoI {
     private static dislikeDao: DislikeDao | null = null;
+
+    private constructor() {
+    }
+
     public static getInstance = (): DislikeDao => {
         if (DislikeDao.dislikeDao === null) {
             DislikeDao.dislikeDao = new DislikeDao();
         }
         return DislikeDao.dislikeDao;
-    }
-
-    private constructor() {
     }
 
     /**

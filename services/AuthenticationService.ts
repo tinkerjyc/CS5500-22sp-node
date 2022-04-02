@@ -5,12 +5,11 @@
  *     <li>register</li>
  * </ul>
  */
-import axios from "axios";
+import UserDao from "../daos/UserDao"
+
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const AUTH_API = `${BASE_URL}/api/auth`
 
-
-import UserDao from "../daos/UserDao"
 
 const userDao: UserDao = UserDao.getInstance();
 

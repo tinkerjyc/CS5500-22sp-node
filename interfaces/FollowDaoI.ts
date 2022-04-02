@@ -1,14 +1,18 @@
-import Follow from "../models/Follow";
-
 /**
  * @file Declares API for Follows related data access object methods
  */
+import Follow from "../models/follows/Follow";
+
 export default interface FollowDaoI {
-    userFollowsUser(uid: string, xuid: string): Promise<Follow>;
+    findAllUsersThatUserIsFollowing(uid: string): Promise<Follow[]>;
 
-    userUnfollowsUser(uid: string, xuid: string): Promise<any>;
+    findAllUsersThatUserIsFollowedBy(uid: string): Promise<Follow[]>;
 
-    findAllUsersFollowing(uid: string): Promise<Follow[]>;
+    userFollowsAnotherUser(source_uid: string, target_uid: string): Promise<Follow>;
 
-    findAllUsersFollower(uid: string): Promise<Follow[]>;
+    userUnFollowsAnotherUser(source_uid: string, target_uid: string): Promise<any>;
+
+    userUnFollowsAllUsers(uid: string): Promise<any>;
+
+    userDeletesAllFollowers(uid: string): Promise<any>;
 };

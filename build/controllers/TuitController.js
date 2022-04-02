@@ -1,7 +1,7 @@
 /**
  * @file Controller RESTful Web service API for tuits resource
  */
-import {Request, Response, Express} from "express";
+import {Express, Request, Response} from "express";
 import Tuit from "../models/tuits/Tuit";
 import TuitDao from "../daos/TuitDao";
 import TuitControllerI from "../interfaces/TuitControllerI";
@@ -26,6 +26,9 @@ export default class TuitController implements TuitControllerI {
     private static tuitDao: TuitDao = TuitDao.getInstance();
     private static tuitController: TuitController | null = null;
 
+    private constructor() {
+    }
+
     /**
      * Creates singleton controller instance
      * @param {Express} app Express instance to declare the RESTful Web service
@@ -48,9 +51,6 @@ export default class TuitController implements TuitControllerI {
             app.delete("/api/tuits/:tid", TuitController.tuitController.deleteTuit);
         }
         return TuitController.tuitController;
-    }
-
-    private constructor() {
     }
 
     /**

@@ -2,7 +2,7 @@
  * @file Implements mongoose schema for dislikes
  */
 import mongoose, {Schema} from "mongoose";
-import Dislike from "../../models/dislikes/Dislike";
+import Dislike from "../../models/likes/Dislike";
 
 /**
  * @typedef Dislike Represents the dislike relation between a user and a tuit

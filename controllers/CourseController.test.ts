@@ -8,7 +8,6 @@ const courseController = new CourseController(app);
 const courseDao = CourseDao.getInstance();
 
 
-
 describe('findAllCourses Controller', () => {
     jest.mock('axios');
 

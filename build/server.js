@@ -1,8 +1,8 @@
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+    return (mod && mod.__esModule) ? mod : {"default": mod};
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 /**
  * @file Implements an Express Node HTTP server. Declares RESTful Web services
  * enabling CRUD operations on the following resources:
@@ -16,15 +16,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * service
  */
 require('dotenv').config({
-    path: "./.env"
-});
+                             path: "./.env"
+                         });
 const express_1 = __importDefault(require("express"));
 const CourseController_1 = __importDefault(require("./controllers/CourseController"));
 const UserController_1 = __importDefault(require("./controllers/UserController"));
 const TuitController_1 = __importDefault(require("./controllers/TuitController"));
 const LikeController_1 = __importDefault(require("./controllers/LikeController"));
 const SessionController_1 = __importDefault(require("./controllers/SessionController"));
-const AuthenticationController_1 = __importDefault(require("./controllers/AuthenticationController"));
+const AuthenticationController_1 = __importDefault(
+    require("./controllers/AuthenticationController"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const GroupController_1 = __importDefault(require("./controllers/GroupController"));
 const DisLikeController_1 = __importDefault(require("./controllers/DisLikeController"));
@@ -44,9 +45,9 @@ const connectionString = `mongodb+srv://root:toor@whiteboard.quiue.mongodb.net/m
 mongoose_1.default.connect(connectionString);
 const app = (0, express_1.default)();
 app.use(cors({
-    credentials: true,
-    origin: process.env.CORS_ORIGIN
-}));
+                 credentials: true,
+                 origin: process.env.CORS_ORIGIN
+             }));
 let sess = {
     secret: process.env.EXPRESS_SESSION_SECRET,
     saveUninitialized: true,

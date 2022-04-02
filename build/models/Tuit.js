@@ -1,5 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
+
 class Tuit {
     constructor() {
         this.tuit = '';
@@ -7,4 +8,5 @@ class Tuit {
         this.postedBy = null;
     }
 }
+
 exports.default = Tuit;

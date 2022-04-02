@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const GroupSchema = new mongoose.Schema({
     name: {type: String, unique: true},
     createdOn: {type: Date, default: Date.now},

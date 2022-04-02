@@ -1,12 +1,13 @@
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+    return (mod && mod.__esModule) ? mod : {"default": mod};
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 /**
  * @file Controller RESTful Web service API for users resource
  */
 const UserDao_1 = __importDefault(require("../daos/UserDao"));
+
 /**
  * @class UserController Implements RESTful Web service API for users resource.
  * Defines the following HTTP endpoints:
@@ -77,10 +78,12 @@ class UserController {
          */
         this.deleteAllUsers = (req, res) => UserController.userDao.deleteAllUsers()
             .then((status) => res.send(status));
-        this.deleteUsersByUsername = (req, res) => UserController.userDao.deleteUsersByUsername(req.params.username)
-            .then(status => res.send(status));
+        this.deleteUsersByUsername =
+            (req, res) => UserController.userDao.deleteUsersByUsername(req.params.username)
+                .then(status => res.send(status));
     }
 }
+
 exports.default = UserController;
 UserController.userDao = UserDao_1.default.getInstance();
 UserController.userController = null;
@@ -103,7 +106,8 @@ UserController.getInstance = (app) => {
         // for testing. Not RESTful
         app.get("/api/users/create", UserController.userController.createUser);
         app.get("/api/users/id/:uid/delete", UserController.userController.deleteUser);
-        app.get("/api/users/username/:username/delete", UserController.userController.deleteUsersByUsername);
+        app.get("/api/users/username/:username/delete",
+                UserController.userController.deleteUsersByUsername);
         app.get("/api/users/delete", UserController.userController.deleteAllUsers);
     }
     return UserController.userController;

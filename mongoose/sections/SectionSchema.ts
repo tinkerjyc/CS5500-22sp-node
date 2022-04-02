@@ -1,5 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import Section from "./Section";
+
 const SectionSchema = new mongoose.Schema<Section>({
     name: String,
     seats: Number,

@@ -1,9 +1,10 @@
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+    return (mod && mod.__esModule) ? mod : {"default": mod};
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", {value: true});
 const FollowDao_1 = __importDefault(require("../daos/FollowDao"));
+
 /**
  * @class FollowController Implements RESTful Web service API for follows resource.
  * Defines the following HTTP endpoints:
@@ -34,8 +35,9 @@ class FollowController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the user objects
          */
-        this.findAllUsersFollowing = (req, res) => FollowController.followDao.findAllUsersFollowing(req.params.uid)
-            .then(follows => res.json(follows));
+        this.findAllUsersFollowing =
+            (req, res) => FollowController.followDao.findAllUsersFollowing(req.params.uid)
+                .then(follows => res.json(follows));
         /**
          * Retrieves a list of other users that are following a user from the database
          * @param {Request} req Represents request from client, including the path
@@ -43,8 +45,9 @@ class FollowController {
          * @param {Response} res Represents response to client, including the
          * body formatted as JSON arrays containing the tuit objects that were followd
          */
-        this.findAllUsersFollower = (req, res) => FollowController.followDao.findAllUsersFollower(req.params.uid)
-            .then(follows => res.json(follows));
+        this.findAllUsersFollower =
+            (req, res) => FollowController.followDao.findAllUsersFollower(req.params.uid)
+                .then(follows => res.json(follows));
         /**
          * @param {Request} req Represents request from client, including the
          * path parameters uid and xuid representing the user that is following another user
@@ -53,8 +56,10 @@ class FollowController {
          * body formatted as JSON containing the new follows that was inserted in the
          * database
          */
-        this.userFollowsUser = (req, res) => FollowController.followDao.userFollowsUser(req.params.uid, req.params.xuid)
-            .then(follows => res.json(follows));
+        this.userFollowsUser =
+            (req, res) => FollowController.followDao.userFollowsUser(req.params.uid,
+                                                                     req.params.xuid)
+                .then(follows => res.json(follows));
         /**
          * @param {Request} req Represents request from client, including the
          * path parameters uid and xuid representing the user that is unfollowing
@@ -62,10 +67,13 @@ class FollowController {
          * @param {Response} res Represents response to client, including status
          * on whether deleting the follow was successful or not
          */
-        this.userUnfollowsUser = (req, res) => FollowController.followDao.userUnfollowsUser(req.params.uid, req.params.xuid)
-            .then(status => res.send(status));
+        this.userUnfollowsUser =
+            (req, res) => FollowController.followDao.userUnfollowsUser(req.params.uid,
+                                                                       req.params.xuid)
+                .then(status => res.send(status));
     }
 }
+
 exports.default = FollowController;
 FollowController.followDao = FollowDao_1.default.getInstance();
 FollowController.followController = null;
@@ -78,10 +86,14 @@ FollowController.followController = null;
 FollowController.getInstance = (app) => {
     if (FollowController.followController === null) {
         FollowController.followController = new FollowController();
-        app.get("/api/users/:uid/following", FollowController.followController.findAllUsersFollower);
-        app.get("/api/users/:uid/followedby", FollowController.followController.findAllUsersFollowing);
-        app.post("/api/users/:uid/follows/:xuid", FollowController.followController.userFollowsUser);
-        app.delete("/api/users/:uid/follows/:xuid", FollowController.followController.userUnfollowsUser);
+        app.get("/api/users/:uid/following",
+                FollowController.followController.findAllUsersFollower);
+        app.get("/api/users/:uid/followedby",
+                FollowController.followController.findAllUsersFollowing);
+        app.post("/api/users/:uid/follows/:xuid",
+                 FollowController.followController.userFollowsUser);
+        app.delete("/api/users/:uid/follows/:xuid",
+                   FollowController.followController.userUnfollowsUser);
     }
     return FollowController.followController;
 };

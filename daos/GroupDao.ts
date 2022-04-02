@@ -1,5 +1,6 @@
 import GroupModel from "../mongoose/groups/GroupModel";
 import GroupMembershipModel from "../mongoose/groups/GroupMembershipModel";
+
 export const findAllGroups = () =>
     GroupModel.find();
 export const findGroupById = (gid: string) =>

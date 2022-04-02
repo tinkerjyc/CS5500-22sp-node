@@ -9,5 +9,5 @@
  * @returns {number} Sum of a and b
  */
 function add(a, b) {
-  return a + b;
+    return a + b;
 }

@@ -14,14 +14,15 @@ import TuitDaoI from "../interfaces/TuitDaoI";
  */
 export default class TuitDao implements TuitDaoI {
     private static tuitDao: TuitDao | null = null;
+
+    private constructor() {
+    }
+
     public static getInstance = (): TuitDao => {
         if (TuitDao.tuitDao === null) {
             TuitDao.tuitDao = new TuitDao();
         }
         return TuitDao.tuitDao;
-    }
-
-    private constructor() {
     }
 
     /**

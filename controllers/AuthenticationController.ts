@@ -1,7 +1,7 @@
 /**
  * @file Controller RESTful Web service API for authentication resource
  */
-import {Request, Response, Express} from "express";
+import {Express, Request, Response} from "express";
 import UserDao from "../daos/UserDao";
 
 const bcrypt = require('bcrypt');

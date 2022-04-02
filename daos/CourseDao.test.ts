@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import CourseDao from "./CourseDao";
 import SectionDao from "./SectionDao";
+
 mongoose.connect('mongodb://localhost:27017/cs5500-test-123');
 
 const sectionDao = SectionDao.getInstance();
@@ -9,7 +10,7 @@ const courseDao = CourseDao.getInstance();
 const TEST_COURSE_COUNT = 10;
 beforeEach(() => {
     const promises = [];
-    for(let i = 0; i < TEST_COURSE_COUNT; i++) {
+    for (let i = 0; i < TEST_COURSE_COUNT; i++) {
         const promise = courseDao.createCourse({
             title: `csTest-${i}`
         });
@@ -20,7 +21,7 @@ beforeEach(() => {
 
 afterEach(() => {
     const promises = [];
-    for(let i = 0; i < TEST_COURSE_COUNT; i++) {
+    for (let i = 0; i < TEST_COURSE_COUNT; i++) {
         const promise = courseDao
             .deleteCourseByTitle(`csTest-${i}`);
         promises.push(promise);

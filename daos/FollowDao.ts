@@ -4,21 +4,20 @@
  */
 import FollowDaoI from "../interfaces/FollowDaoI";
 import FollowModel from "../mongoose/follows/FollowModel";
-import Follow from "../models/Follow";
+import Follow from "../models/follows/Follow";
 
 /**
  * @class FollowDao Implements Data Access Object managing data storage
  * of Follows
- * @implements {FollowDaoI}
+ * @implements {FollowDaoI} FollowDaoI
  * @property {FollowDao} followDao Private single instance of FollowDao
  */
 export default class FollowDao implements FollowDaoI {
     private static followDao: FollowDao | null = null;
 
-    /**
-     * Creates singleton DAO instance
-     * @returns FollowDao
-     */
+    private constructor() {
+    }
+
     public static getInstance = (): FollowDao => {
         if (FollowDao.followDao === null) {
             FollowDao.followDao = new FollowDao();
@@ -26,52 +25,54 @@ export default class FollowDao implements FollowDaoI {
         return FollowDao.followDao;
     }
 
-    private constructor() {
-    }
-
     /**
-     * Uses FollowModel to retrieve all follows documents of followers
-     * from follows collection for a particular user
-     * @param {string} uid User's primary key
-     * @returns Promise To be notified when the followers are retrieved from
-     * database
+     * Uses FollowModel to retrieve all users followed by a user from follows collection
+     * @param {string} uid actor user's primary key
+     * @returns Promise To be notified when the follows are retrieved from database
      */
-    findAllUsersFollower = async (uid: string): Promise<Follow[]> =>
+    findAllUsersThatUserIsFollowing = async (uid: string): Promise<Follow[]> =>
         FollowModel
             .find({userFollowing: uid})
+            .populate("userFollowed")
+            .exec();
+    /**
+     * Uses FollowModel to retrieve all users following a user from follows collection
+     * @param {string} uid actor user's primary key
+     * @returns Promise To be notified when the follows are retrieved from database
+     */
+    findAllUsersThatUserIsFollowedBy = async (uid: string): Promise<Follow[]> =>
+        FollowModel
+            .find({userFollowed: uid})
             .populate("userFollowing")
             .exec();
-
     /**
-     * Uses FollowModel to retrieve all follows documents of following users
-     * from follows collection for a particular user
-     * @param {string} uid User's primary key
-     * @returns Promise To be notified when the following users are retrieved from
-     * database
+     * Inserts follow instance into the database under user context shows one user follows another
+     * @param {string} source_uid source/actor user's primary key
+     * @param {string} target_uid target user's primary key
+     * @returns Promise To be notified when the follow is inserted into database
      */
-    findAllUsersFollowing = async (uid: string): Promise<Follow[]> =>
-        FollowModel
-            .find({userFollowedBy: uid})
-            .populate("userFollowedBy")
-            .exec();
-
+    userFollowsAnotherUser = async (source_uid: string, target_uid: string): Promise<Follow> =>
+        FollowModel.create({userFollowing: source_uid, userFollowed: target_uid});
     /**
-     * Inserts follow instance of a particular user following another user
-     * into the database
-     * @param {string} uid Primary key of the user following another user
-     * @param {string} xuid Primary key of the user being followed by another user
-     * @returns Promise To be notified when follow is inserted into the database
+     * Removes follow instance from the database
+     * @param {string} source_uid source/actor user's primary key
+     * @param {string} target_uid target user's primary key
+     * @returns Promise To be notified when the follow is removed from database
      */
-    userFollowsUser = async (uid: string, xuid: string): Promise<Follow> =>
-        FollowModel.create({userFollowing: uid, userFollowedBy: xuid});
-
+    userUnFollowsAnotherUser = async (source_uid: string, target_uid: string): Promise<any> =>
+        FollowModel.deleteOne({userFollowing: source_uid, userFollowed: target_uid});
     /**
-     * Removes follow instance of a particular user following another user
-     * from the database.
-     * @param {string} uid Primary key of the user following another user
-     * @param {string} xuid Primary key of the user being followed by another user
-     * @returns Promise To be notified when follow is removed from the database
+     * Removes all follow instances from the database initiated by a user
+     * @param {string} uid source/actor user's primary key
+     * @returns Promise To be notified when all follows are removed from database
      */
-    userUnfollowsUser = async (uid: string, xuid: string): Promise<any> =>
-        FollowModel.deleteOne({userFollowing: uid, userFollowedBy: xuid});
+    userUnFollowsAllUsers = async (uid: string): Promise<any> =>
+        FollowModel.deleteMany({userFollowing: uid})
+    /**
+     * Removes all follow instances from the database that have a target user
+     * @param {string} uid target_uid target user's primary key
+     * @returns Promise To be notified when all follows are removed from database
+     */
+    userDeletesAllFollowers = async (uid: string): Promise<any> =>
+        FollowModel.deleteMany({userFollowed: uid})
 }

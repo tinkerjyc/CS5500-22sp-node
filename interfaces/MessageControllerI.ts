@@ -1,15 +1,18 @@
+/**
+ * @file Declares controller RESTful API for Messages resource
+ */
 import {Request, Response} from "express";
 
 export default interface MessageControllerI {
-    findAllMessagesToUser(req: Request, res: Response): void;
+    findAllMessagesSentByUser(req: Request, res: Response): void;
 
-    findAllMessagesFromUser(req: Request, res: Response): void;
+    findAllMessagesSentToUser(req: Request, res: Response): void;
 
-    findUserMessagesUser(req: Request, res: Response): void;
+    userSendsMessage(req: Request, res: Response): void;
 
-    sendMessage(req: Request, res: Response): void;
+    userDeletesOneMessage(req: Request, res: Response): void;
 
-    updateMessage(req: Request, res: Response): void;
+    userDeletesAllSentMessage(req: Request, res: Response): void;
 
-    deleteMessage(req: Request, res: Response): void;
+    userDeletesAllReceivedMessage(req: Request, res: Response): void;
 };
